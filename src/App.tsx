@@ -1,25 +1,40 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import Carrinho from './Components/Carrinho';
+import { interfaceStore } from './Types/interfaces'
+import Adicionar from './Components/Adicionar';
+import Remover from './Components/Remover';
+
+const initialState: interfaceStore = {
+  carrinho: 0
+}
+
+function reducer(state = initialState, action: any) {
+  switch(action.type) {
+    case 'ADICIONAR_AO_CARRINHO':
+      return {
+        carrinho: state.carrinho + 1
+      };
+      case 'REMOVER_DO_CARRINHO':
+        return {
+          carrinho: state.carrinho > 0 ? state.carrinho - 1 : state.carrinho
+        }
+      default:
+        return state
+  }
+}
+
+const store = createStore(reducer)
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={store}>
+      <Remover />
+      <Carrinho />
+      <Adicionar />
+    </Provider>
   );
 }
 
